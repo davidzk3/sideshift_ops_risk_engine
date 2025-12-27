@@ -149,6 +149,13 @@ Below is an example of the live execution and liquidity risk table produced by t
 <img src="docs/control_table.png" alt="risk engine output" width="900" />
 
 ---
+## Incident Review Output
+
+The incident review view shows persisted execution and liquidity incidents, supporting operational review and post-incident analysis.
+
+<img src="docs/incident_log.png" alt="incident log output" width="900" />
+
+---
 ## Why This Exists
 
 Most crypto systems focus on charts, dashboards, and historical metrics.
