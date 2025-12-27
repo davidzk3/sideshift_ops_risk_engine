@@ -78,40 +78,48 @@ This mirrors how operators scan recent incidents during:
 
 ## Project Structure
 
+```text
 sideshift_ops_risk_engine/
 ├── main.py
 ├── show_incidents.py
 ├── requirements.txt
 ├── README.md
+├── .gitignore
+│
 ├── data_sources/
 │   ├── binance.py
 │   └── hyperliquid.py
+│
 ├── risk_models/
 │   ├── price_divergence.py
 │   └── liquidity_stress.py
+│
 ├── decision_engine/
 │   ├── rules.yaml
 │   └── risk_to_action.py
-├── incidents/
-│   ├── incident_schema.py
-│   ├── incident_generator.py
-│   ├── incident_store.py
-│   └── example_incidents.md
-└── .gitignore
-
+│
+└── incidents/
+    ├── incident_schema.py
+    ├── incident_generator.py
+    ├── incident_store.py
+    └── example_incidents.md
+```
 ---
-
 ## How to Run
 
 ### Setup
 
+```bash
 python -m venv .venv  
 .venv\Scripts\activate  
-pip install -r requirements.txt  
+pip install -r requirements.txt
+```
 
 ### Run the risk engine
 
+```bash
 python main.py
+```
 
 This will:
 - Fetch live prices
@@ -121,7 +129,9 @@ This will:
 
 ### View incidents
 
+```bash
 python show_incidents.py
+```
 
 ---
 
@@ -155,6 +165,7 @@ It is designed to demonstrate operations risk thinking, not just data analysis.
 - Incident resolution and postmortem workflow
 - Alerting via Telegram or Slack
 
+MVP scope focuses on real time detection, deterministic decisioning, incident persistence, and review tooling.
 ---
 
 ## Disclaimer
