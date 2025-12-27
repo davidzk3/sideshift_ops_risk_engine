@@ -142,7 +142,13 @@ python show_incidents.py
 - The system favors false positives over silent failure, consistent with ops best practice
 
 ---
+## Example Output
 
+Below is an example of the live execution and liquidity risk table produced by the engine.
+
+<img src="docs/control_table.png" alt="risk engine output" width="900" />
+
+---
 ## Why This Exists
 
 Most crypto systems focus on charts, dashboards, and historical metrics.
@@ -166,6 +172,7 @@ It is designed to demonstrate operations risk thinking, not just data analysis.
 - Alerting via Telegram or Slack
 
 MVP scope focuses on real time detection, deterministic decisioning, incident persistence, and review tooling.
+
 ---
 
 ## Disclaimer
