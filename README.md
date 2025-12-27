@@ -109,7 +109,7 @@ sideshift_ops_risk_engine/
 
 ### Setup
 
-```text
+```bash
 python -m venv .venv  
 .venv\Scripts\activate  
 pip install -r requirements.txt
@@ -117,7 +117,7 @@ pip install -r requirements.txt
 
 ### Run the risk engine
 
-```text
+```bash
 python main.py
 ```
 
@@ -129,7 +129,7 @@ This will:
 
 ### View incidents
 
-```text
+```bash
 python show_incidents.py
 ```
 
@@ -165,6 +165,7 @@ It is designed to demonstrate operations risk thinking, not just data analysis.
 - Incident resolution and postmortem workflow
 - Alerting via Telegram or Slack
 
+MVP scope focuses on real time detection, deterministic decisioning, incident persistence, and review tooling.
 ---
 
 ## Disclaimer
