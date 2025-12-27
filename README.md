@@ -109,13 +109,17 @@ sideshift_ops_risk_engine/
 
 ### Setup
 
+```text
 python -m venv .venv  
 .venv\Scripts\activate  
-pip install -r requirements.txt  
+pip install -r requirements.txt
+```
 
 ### Run the risk engine
 
+```text
 python main.py
+```
 
 This will:
 - Fetch live prices
@@ -125,7 +129,9 @@ This will:
 
 ### View incidents
 
+```text
 python show_incidents.py
+```
 
 ---
 
