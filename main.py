@@ -1,12 +1,16 @@
 import yaml
 from rich.console import Console
 from rich.table import Table
+from datetime import datetime
 
 from data_sources.binance import get_spot_price
 from data_sources.hyperliquid import get_mid_price
 from risk_models.price_divergence import divergence_bps
 from decision_engine.risk_to_action import decide_price_divergence
 from risk_models.liquidity_stress import assess_liquidity
+from incidents.incident_generator import maybe_create_incident
+from incidents.incident_store import persist_incident
+from incidents.incident_schema import Incident
 
 
 console = Console()
@@ -31,8 +35,9 @@ def run_once(asset: str) -> dict:
 
     div_bps = divergence_bps(price_binance, price_hl)
     decision = decide_price_divergence(div_bps, rules)
-        # liquidity stress assumptions
-    expected_swap_usd = 25000
+
+    # liquidity stress assumptions
+    expected_swap_usd = 600000  # keep high to force incidents while testing
 
     assumed_liquidity_map = {
         "ETH": 5_000_000,
@@ -47,6 +52,31 @@ def run_once(asset: str) -> dict:
         assumed_liquidity_usd=assumed_liquidity,
     )
 
+    # incident creation on high severity breaches
+    incident = maybe_create_incident(
+        asset=asset,
+        price_severity=decision.severity,
+        liquidity_severity=liquidity_result.severity,
+        trigger="price divergence or liquidity stress breach",
+    )
+
+    print("DEBUG incident object:", incident)
+
+    if incident:
+        persist_incident(incident)
+
+    # Forced persistence verification (temporary)
+    forced_incident = Incident(
+        incident_id="INC-FORCED-001",
+        created_at=datetime.utcnow(),
+        asset=asset,
+        incident_type="forced_test",
+        severity="high",
+        trigger="forced write test",
+        impact_summary="forced persistence verification",
+        mitigation="none",
+    )
+    persist_incident(forced_incident)
 
     return {
         "asset": asset,
@@ -58,6 +88,7 @@ def run_once(asset: str) -> dict:
         "liquidity_slippage_pct": liquidity_result.estimated_slippage_pct,
         "liquidity_severity": liquidity_result.severity,
         "liquidity_note": liquidity_result.note,
+        "incident_id": incident.incident_id if incident else "",
     }
 
 
@@ -70,7 +101,7 @@ def print_table(rows: list[dict]) -> None:
     t.add_column("slippage %", justify="right")
     t.add_column("liq sev")
     t.add_column("liq note")
-
+    t.add_column("incident")
 
     for r in rows:
         t.add_row(
@@ -81,8 +112,8 @@ def print_table(rows: list[dict]) -> None:
             f'{r["liquidity_slippage_pct"]:.2f}',
             r["liquidity_severity"],
             r["liquidity_note"],
+            r["incident_id"],
         )
-
 
     console.print(t)
 
@@ -90,6 +121,7 @@ def print_table(rows: list[dict]) -> None:
 if __name__ == "__main__":
     assets = ["ETH", "BTC", "SOL"]
     rows = []
+
     for a in assets:
         try:
             rows.append(run_once(a))
@@ -100,9 +132,12 @@ if __name__ == "__main__":
                     "binance_spot": 0.0,
                     "hyperliquid_mid": 0.0,
                     "divergence_bps": 0.0,
-                    "severity": "error",
-                    "action": "check_feed",
-                    "note": str(e),
+                    "price_severity": "error",
+                    "price_action": "check_feed",
+                    "liquidity_slippage_pct": 0.0,
+                    "liquidity_severity": "error",
+                    "liquidity_note": str(e),
+                    "incident_id": "",
                 }
             )
 
