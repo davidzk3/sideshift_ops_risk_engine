@@ -78,29 +78,33 @@ This mirrors how operators scan recent incidents during:
 
 ## Project Structure
 
+```text
 sideshift_ops_risk_engine/
 ├── main.py
 ├── show_incidents.py
 ├── requirements.txt
 ├── README.md
+├── .gitignore
+│
 ├── data_sources/
 │   ├── binance.py
 │   └── hyperliquid.py
+│
 ├── risk_models/
 │   ├── price_divergence.py
 │   └── liquidity_stress.py
+│
 ├── decision_engine/
 │   ├── rules.yaml
 │   └── risk_to_action.py
-├── incidents/
-│   ├── incident_schema.py
-│   ├── incident_generator.py
-│   ├── incident_store.py
-│   └── example_incidents.md
-└── .gitignore
-
+│
+└── incidents/
+    ├── incident_schema.py
+    ├── incident_generator.py
+    ├── incident_store.py
+    └── example_incidents.md
+```
 ---
-
 ## How to Run
 
 ### Setup
